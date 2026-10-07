@@ -1,0 +1,70 @@
+{
+    "name": "biztecheg/laravel-fawaterk",
+    "description": "Security-first Laravel integration for the Fawaterk payment gateway: API v3, verified webhooks and a payments ledger. Unofficial.",
+    "keywords": [
+        "laravel",
+        "fawaterk",
+        "fawaterak",
+        "payment",
+        "payment-gateway",
+        "webhooks",
+        "egypt"
+    ],
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "BiztechEG",
+            "homepage": "https://github.com/BiztechEG"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/BiztechEG/laravel-fawaterk/issues",
+        "source": "https://github.com/BiztechEG/laravel-fawaterk",
+        "security": "https://github.com/BiztechEG/laravel-fawaterk/security/policy"
+    },
+    "require": {
+        "php": "^8.2",
+        "guzzlehttp/guzzle": "^7.15.2",
+        "guzzlehttp/psr7": "^2.12.3",
+        "laravel/framework": "^9.52|^10.48|^11.44|^12.4|^13.0"
+    },
+    "require-dev": {
+        "larastan/larastan": "^2.9|^3.0",
+        "laravel/pint": "^1.13",
+        "orchestra/testbench": "^7.0|^8.0|^9.0|^10.0|^11.0",
+        "phpunit/phpunit": "^9.5.10|^10.5|^11.0|^12.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "BiztechEG\\Fawaterk\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "BiztechEG\\Fawaterk\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "BiztechEG\\Fawaterk\\FawaterkServiceProvider"
+            ],
+            "aliases": {
+                "Fawaterk": "BiztechEG\\Fawaterk\\Facades\\Fawaterk"
+            }
+        }
+    },
+    "scripts": {
+        "test": "phpunit",
+        "analyse": "phpstan analyse --memory-limit=1G",
+        "format": "pint",
+        "format:check": "pint --test"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": false
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

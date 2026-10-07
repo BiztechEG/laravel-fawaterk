@@ -1,0 +1,14 @@
+/vendor/
+/build/
+/.phpunit.cache/
+/.phpunit.result.cache
+/composer.lock
+/.idea/
+/.vscode/
+.DS_Store
+Thumbs.db
+
+# Never commit credentials or captured webhook payloads.
+.env
+.env.*
+/staging-captures/

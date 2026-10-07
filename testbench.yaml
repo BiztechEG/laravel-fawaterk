@@ -1,0 +1,3 @@
+# Lets larastan (and `vendor/bin/testbench`) boot the package the way an app would.
+providers:
+  - BiztechEG\Fawaterk\FawaterkServiceProvider

@@ -1,0 +1,111 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+/*
+ * The Fawaterk ledger. Published by `php artisan fawaterk:install`.
+ *
+ * Before migrating, set in config/fawaterk.php:
+ * - ledger.payable_key_type: the key type of your payable models (int, uuid, ulid or string)
+ * - ledger.connection and ledger.table_prefix, if the defaults do not suit you
+ */
+return new class extends Migration
+{
+    public function getConnection()
+    {
+        return config('fawaterk.ledger.connection') ?: null;
+    }
+
+    public function up(): void
+    {
+        $prefix = config('fawaterk.ledger.table_prefix', 'fawaterk_');
+        $keyType = config('fawaterk.ledger.payable_key_type', 'int');
+
+        Schema::connection($this->getConnection())->create($prefix.'payments', function (Blueprint $table) use ($keyType, $prefix) {
+            $table->id();
+            $table->uuid('uuid')->unique();
+            $table->string('account', 32)->default('default');
+            // staging or live: rows are never touched by the other environment.
+            $table->string('environment', 8);
+            $table->string('payable_type', 191);
+
+            match ($keyType) {
+                'int' => $table->unsignedBigInteger('payable_id'),
+                'uuid' => $table->uuid('payable_id'),
+                'ulid' => $table->char('payable_id', 26),
+                'string' => $table->string('payable_id', 64),
+                default => throw new InvalidArgumentException('fawaterk.ledger.payable_key_type must be int, uuid, ulid or string.'),
+            };
+
+            $table->string('purpose', 64)->default('default');
+            $table->string('profile', 64);
+
+            $table->char('intent_key', 36)->nullable()->unique();
+            $table->unsignedBigInteger('fawaterk_transaction_id')->nullable();
+            $table->unsignedInteger('payment_method_id')->nullable();
+
+            $table->unsignedBigInteger('amount_minor');
+            $table->char('currency', 3)->default('EGP');
+            $table->unsignedBigInteger('paid_amount_minor')->nullable();
+            // What the paid total had to be (per commission mode); null when it could not be worked out.
+            $table->unsignedBigInteger('expected_amount_minor')->nullable();
+            $table->unsignedBigInteger('refunded_amount_minor')->default(0);
+
+            $table->string('status', 16);
+            $table->string('failure_reason', 64)->nullable();
+            $table->char('order_fingerprint', 64);
+            $table->json('flags')->nullable();
+            $table->json('refund_ids')->nullable();
+            $table->json('refund_pending')->nullable();
+            $table->json('refund_unannounced')->nullable();
+            $table->timestamp('refund_watch_until')->nullable();
+            $table->timestamp('next_refund_check_at')->nullable();
+            $table->timestamp('next_alert_at')->nullable();
+
+            $table->text('checkout_url')->nullable();
+            $table->string('reference', 64)->nullable();
+            $table->timestamp('reference_expires_at')->nullable();
+
+            $table->timestamp('expires_at')->nullable();
+            $table->timestamp('paid_at')->nullable();
+            $table->timestamp('last_checked_at')->nullable();
+            $table->timestamp('next_check_at')->nullable();
+
+            $table->timestamp('fulfilled_at')->nullable();
+            $table->timestamp('next_dispatch_at')->nullable();
+            $table->unsignedInteger('fulfil_attempts')->default(0);
+            $table->timestamps();
+
+            $table->index(['payable_type', 'payable_id', 'purpose'], $prefix.'payments_payable_index');
+            $table->index(['account', 'fawaterk_transaction_id'], $prefix.'payments_transaction_index');
+            $table->index(['status', 'next_check_at'], $prefix.'payments_check_index');
+            $table->index(['status', 'next_dispatch_at'], $prefix.'payments_dispatch_index');
+            $table->index('next_refund_check_at', $prefix.'payments_refund_check_index');
+            $table->index('next_alert_at', $prefix.'payments_alert_index');
+        });
+
+        Schema::connection($this->getConnection())->create($prefix.'webhook_events', function (Blueprint $table) use ($prefix) {
+            $table->id();
+            $table->string('account', 32)->default('default');
+            $table->string('environment', 8);
+            $table->string('type', 16);
+            $table->string('outcome', 32);
+            $table->char('intent_key', 36)->nullable();
+            $table->string('dedupe_key', 191)->nullable();
+            $table->timestamp('created_at')->nullable();
+
+            $table->index(['type', 'dedupe_key'], $prefix.'webhook_events_dedupe_index');
+            $table->index('created_at', $prefix.'webhook_events_created_index');
+        });
+    }
+
+    public function down(): void
+    {
+        $prefix = config('fawaterk.ledger.table_prefix', 'fawaterk_');
+
+        Schema::connection($this->getConnection())->dropIfExists($prefix.'webhook_events');
+        Schema::connection($this->getConnection())->dropIfExists($prefix.'payments');
+    }
+};

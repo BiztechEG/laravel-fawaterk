@@ -1,0 +1,13 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+
+parameters:
+    level: 8
+    paths:
+        - src
+        # The fixture model is how the HasFawaterkPayments trait gets analysed.
+        - tests/Fixtures
+    tmpDir: build/phpstan
+    # Public API methods re-check their documented types at runtime on purpose
+    # (callers may be untyped app code), so phpdoc types are not treated as certain.
+    treatPhpDocTypesAsCertain: false

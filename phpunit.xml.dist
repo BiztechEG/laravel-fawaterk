@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="vendor/autoload.php"
+         colors="true"
+         failOnRisky="true"
+         failOnWarning="true"
+         defaultTestSuite="Default">
+    <testsuites>
+        <testsuite name="Default">
+            <directory>tests/Unit</directory>
+            <directory>tests/Feature</directory>
+        </testsuite>
+        <!-- Real MySQL / MariaDB and worker processes: see tests/MySql/MySqlEnvironment.php -->
+        <testsuite name="MySql">
+            <directory>tests/MySql</directory>
+        </testsuite>
+    </testsuites>
+    <php>
+        <env name="APP_ENV" value="testing"/>
+        <env name="DB_CONNECTION" value="testing"/>
+        <env name="CACHE_DRIVER" value="array"/>
+        <env name="CACHE_STORE" value="array"/>
+    </php>
+</phpunit>
