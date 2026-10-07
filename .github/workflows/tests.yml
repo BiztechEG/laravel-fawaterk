@@ -61,6 +61,9 @@ jobs:
 
       - name: Install dependencies
         run: |
+          # Laravel 9-11 are past their security support, and Composer refuses every release with an open advisory.
+          # The package still supports them, so the test runs (only) may install them. The quality job keeps the audit.
+          composer config --global policy.advisories.block false
           composer require "illuminate/contracts:^${{ matrix.laravel }}.0" "orchestra/testbench:^${{ matrix.testbench }}.0" --dev --no-interaction --no-update
           composer update --${{ matrix.stability }} --prefer-dist --no-interaction --no-progress
 

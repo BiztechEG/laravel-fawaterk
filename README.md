@@ -25,7 +25,8 @@ that check:
 ## Requirements
 
 - PHP 8.2+
-- Laravel 9.52+, 10, 11, 12 or 13
+- Laravel 9.52+, 10, 11, 12 or 13. Laravel 9, 10 and 11 no longer get security fixes from Laravel, and recent
+  Composer versions refuse to install releases with open advisories; prefer Laravel 12 or 13
 - A cache store whose locks work across processes: redis, database, memcached or dynamodb (file on a single server)
 - A database with row locks for the ledger. MySQL 5.7+ and MariaDB 10.6+ are tested with concurrent processes;
   PostgreSQL should work but is not tested yet. SQLite has no row locks: use it for tests only. Multi-primary MySQL
