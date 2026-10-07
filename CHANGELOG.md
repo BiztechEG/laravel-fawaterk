@@ -5,6 +5,10 @@ All notable changes to this package are documented here. The format follows
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-10-07
+
+First release.
+
 ### Added
 
 - Package skeleton: service provider, configuration without secret defaults, test setup, CI.
@@ -76,3 +80,6 @@ All notable changes to this package are documented here. The format follows
   transaction refunds count; an unreadable entry of the list is skipped, never the whole page.
 - `Fawaterk::fake()` is refused when `FAWATERK_ENV=live` or `APP_ENV=production`, and `markFulfilled()` refuses a
   payment with a blocking flag, like `fulfilOnce()`.
+
+[Unreleased]: https://github.com/BiztechEG/laravel-fawaterk/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/BiztechEG/laravel-fawaterk/releases/tag/v1.0.0

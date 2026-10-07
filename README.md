@@ -3,8 +3,6 @@
 Security-first Laravel integration for the [Fawaterk](https://fawaterk.com) payment gateway.
 
 > **Unofficial.** This package is not made, endorsed or supported by Fawaterk.
->
-> **Status: in development.** Not ready for production. The first stable release will be `v1.0.0`.
 
 ## Why another package
 
