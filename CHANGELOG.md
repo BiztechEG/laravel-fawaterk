@@ -5,6 +5,13 @@ All notable changes to this package are documented here. The format follows
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-10-10
+
+### Fixed
+
+- `fawaterk:doctor` now fails a Basata method in link mode (`redirect=true`), as it does for Fawry, Aman and Masary.
+  Its name pattern said `basta`, so a Basata method that returns a link instead of a code passed the check.
+
 ## [1.0.0] - 2026-10-07
 
 First release.
@@ -81,5 +88,6 @@ First release.
 - `Fawaterk::fake()` is refused when `FAWATERK_ENV=live` or `APP_ENV=production`, and `markFulfilled()` refuses a
   payment with a blocking flag, like `fulfilOnce()`.
 
-[Unreleased]: https://github.com/BiztechEG/laravel-fawaterk/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/BiztechEG/laravel-fawaterk/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/BiztechEG/laravel-fawaterk/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/BiztechEG/laravel-fawaterk/releases/tag/v1.0.0

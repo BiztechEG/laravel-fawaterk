@@ -260,6 +260,21 @@ class CommandsTest extends LedgerTestCase
         $this->assertStringContainsString('with redirect=true: Fawaterk returns a link, not a code', $output);
     }
 
+    public function test_a_basata_method_in_link_mode_fails(): void
+    {
+        config()->set('fawaterk.methods.basata', ['name_en' => 'Basata']);
+        $this->fake->setPaymentMethods(
+            new PaymentMethod(2, 'Visa-Mastercard', null, true, false),
+            new PaymentMethod(3, 'Fawry', null, false, false),
+            new PaymentMethod(14, 'Basata', null, true, false),
+        );
+
+        [$code, $output] = $this->doctor(online: true);
+
+        $this->assertSame(1, $code);
+        $this->assertStringContainsString('Basata #14 with redirect=true: Fawaterk returns a link, not a code', $output);
+    }
+
     public function test_an_unknown_method_name_fails(): void
     {
         config()->set('fawaterk.methods.aman', ['name_en' => 'Aman']);

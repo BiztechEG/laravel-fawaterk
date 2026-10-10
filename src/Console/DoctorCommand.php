@@ -636,7 +636,7 @@ final class DoctorCommand extends Command
 
             $gives = $method->redirect ? 'a link (card-preselected)' : 'a reference code';
 
-            if ($method->redirect && preg_match('/fawry|aman|masary|basta/i', $method->nameEn)) {
+            if ($method->redirect && preg_match('/fawry|aman|masary|basata/i', $method->nameEn)) {
                 $this->failure("Method [{$name}] is {$method->nameEn} #{$method->id} with redirect=true: Fawaterk returns a link, not a code. Ask Fawaterk to switch it to direct payment.");
             } else {
                 $this->pass("Method [{$name}] → {$method->nameEn} #{$method->id}: {$gives}");
