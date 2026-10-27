@@ -5,6 +5,14 @@ All notable changes to this package are documented here. The format follows
 
 ## [Unreleased]
 
+## [1.0.2] - 2026-10-27
+
+### Fixed
+
+- A profile's `due_after` is now that many elapsed minutes. It was added to the wall clock, so a due date that
+  crossed a summer-time change came an hour late (or an hour early). The due date also follows `Carbon::setTestNow()`
+  now, like the rest of the checkout.
+
 ## [1.0.1] - 2026-10-10
 
 ### Fixed
@@ -88,6 +96,7 @@ First release.
 - `Fawaterk::fake()` is refused when `FAWATERK_ENV=live` or `APP_ENV=production`, and `markFulfilled()` refuses a
   payment with a blocking flag, like `fulfilOnce()`.
 
-[Unreleased]: https://github.com/BiztechEG/laravel-fawaterk/compare/v1.0.1...HEAD
+[Unreleased]: https://github.com/BiztechEG/laravel-fawaterk/compare/v1.0.2...HEAD
+[1.0.2]: https://github.com/BiztechEG/laravel-fawaterk/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/BiztechEG/laravel-fawaterk/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/BiztechEG/laravel-fawaterk/releases/tag/v1.0.0

@@ -166,6 +166,27 @@ class CheckoutTest extends LedgerTestCase
         $this->assertMinutesFromNow(60, new Carbon($this->fake->created()[1]->toPayload()['due_date']));
     }
 
+    public function test_the_due_date_is_the_minutes_asked_for_even_across_a_clock_change(): void
+    {
+        $timezone = date_default_timezone_get();
+        date_default_timezone_set('Africa/Cairo');
+        // Cairo's summer time ends that night: 24 hours later the wall clock reads 23 hours later.
+        Carbon::setTestNow(Carbon::parse('2026-10-29 12:00:00'));
+
+        try {
+            $this->fawryAnswer();
+
+            $result = Fawaterk::checkout($this->order(), new CheckoutContext(profile: 'fawry', overrides: ['due_after' => 1440]));
+
+            $sent = new Carbon($this->fake->created()[0]->toPayload()['due_date']);
+            $this->assertSame(Carbon::now()->getTimestamp() + 86400, $sent->getTimestamp());
+            $this->assertSame(Carbon::now()->getTimestamp() + 86400, $this->payment($result->paymentUuid)->expires_at->getTimestamp());
+        } finally {
+            Carbon::setTestNow();
+            date_default_timezone_set($timezone);
+        }
+    }
+
     public function test_a_codes_validity_can_be_its_own_expiry_globally_per_profile_or_per_call(): void
     {
         $this->fawryAnswer();

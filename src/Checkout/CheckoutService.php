@@ -32,7 +32,7 @@ use BiztechEG\Fawaterk\Testing\FawaterkFake;
 use BiztechEG\Fawaterk\Webhooks\WebhookType;
 use BiztechEG\Fawaterk\Webhooks\WebhookUrls;
 use Closure;
-use DateTimeImmutable;
+use DateInterval;
 use Illuminate\Cache\ArrayStore;
 use Illuminate\Cache\NullStore;
 use Illuminate\Contracts\Cache\LockProvider;
@@ -276,7 +276,10 @@ final class CheckoutService
     private function finalRequest(CreateTransaction $request, CheckoutContext $context, Profile $profile, ?PaymentMethod $method, string $uuid): CreateTransaction
     {
         $urls = $profile->returnUrls;
-        $dueDate = $profile->dueAfter === null ? $request->dueDate : new DateTimeImmutable('+'.$profile->dueAfter.' minutes');
+        // Elapsed minutes: '+N minutes' moves the wall clock, an hour off when summer time starts or ends meanwhile.
+        $dueDate = $profile->dueAfter === null
+            ? $request->dueDate
+            : Carbon::now()->toDateTimeImmutable()->add(new DateInterval('PT'.$profile->dueAfter.'M'));
 
         // With Route::fawaterk() registered, the payer comes back to the signed
         // result page, unless the profile names its own page.
